@@ -13,7 +13,7 @@ import org.testng.annotations.Test;
 
 /**
  *
- * @author Student
+ * @author Troy khumalo
  */
 public class Login_UserNGTest {
     
