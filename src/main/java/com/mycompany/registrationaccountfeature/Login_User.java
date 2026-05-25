@@ -53,10 +53,9 @@ public class Login_User {
 
     public String loginUser(String username, String password, String firstName, String lastName) {
 
-        if(username.equals(userName) && password.equals(Password)){
+       
             return "Welcome " + firstName + " " + lastName;
         }
 
-        return "Username or password incorrect";
+      
     }
-}
