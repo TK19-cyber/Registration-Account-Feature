@@ -13,7 +13,7 @@ public class RegistrationAccountFeature {
         Scanner scanner = new Scanner(System.in);
         Login_User login = new Login_User();
 
-        // REGISTER
+        
         System.out.println("=== REGISTER ===");
 
         System.out.print("Enter username: ");
@@ -27,7 +27,7 @@ public class RegistrationAccountFeature {
 
         System.out.println(login.registerUser(username, password, phone));
 
-        // LOGIN
+        // ================= PART 1: LOGIN =================
         System.out.println("\n=== LOGIN ===");
 
         System.out.print("Enter username: ");
@@ -36,10 +36,10 @@ public class RegistrationAccountFeature {
         System.out.print("Enter password: ");
         String passLogin = scanner.nextLine();
 
-        System.out.println(login.loginUser(userLogin, passLogin, username, password));
+        System.out.println(login.loginUser(userLogin, passLogin));
 
-        // PART 2 - QUICKCHAT
-        System.out.println("\nWelcome to QuickChat.");
+        // ================= QUICKCHAT (PART 2 + 3) =================
+        System.out.println("\nWelcome to QuickChat");
 
         int choice;
 
@@ -48,7 +48,12 @@ public class RegistrationAccountFeature {
             System.out.println("\nMenu");
             System.out.println("1) Send Message");
             System.out.println("2) Show Recently Sent Message");
-            System.out.println("3) Quit");
+            System.out.println("3) Show Longest Message");
+            System.out.println("4) Search Message by ID");
+            System.out.println("5) Search by Recipient");
+            System.out.println("6) Delete Message by Hash");
+            System.out.println("7) Display Report");
+            System.out.println("8) Quit");
 
             System.out.print("Choose option: ");
             choice = scanner.nextInt();
@@ -56,54 +61,79 @@ public class RegistrationAccountFeature {
 
             switch (choice) {
 
+                // PART 2
                 case 1:
 
-                    System.out.print("Enter recipient (+code): ");
-                    String recipient = scanner.nextLine();
+    System.out.print("Enter recipient (+code): ");
+    String recipient = scanner.nextLine();
 
-                    while (!(recipient.startsWith("+") && recipient.length() <= 12)) {
-                        System.out.println("Invalid number.");
-                        System.out.print("Re-enter: ");
-                        recipient = scanner.nextLine();
-                    }
+    while (!(recipient.startsWith("+") && recipient.length() <= 12)) {
+        System.out.println("Invalid number.");
+        recipient = scanner.nextLine();
+    }
 
-                    System.out.print("Enter message: ");
-                    String text = scanner.nextLine();
+    System.out.print("Enter message: ");
+    String text = scanner.nextLine();
 
-                    while (text.length() > 250) {
-                        System.out.println("Message too long.");
-                        System.out.print("Re-enter: ");
-                        text = scanner.nextLine();
-                    }
+    while (text.length() > 250) {
+        System.out.println("Message too long.");
+        text = scanner.nextLine();
+    }
 
-                    String messageID =
-                            String.valueOf((long)(Math.random() * 1000000000L));
+    String messageID =
+            String.valueOf((long)(Math.random() * 1000000000L));
 
-                    Message message = new Message(messageID, recipient, text);
+    Message message = new Message(messageID, recipient, text);
 
-                    if (message.checkMessageID()) {
-                        System.out.println("Message ID OK");
-                    } else {
-                        System.out.println("Message ID invalid");
-                    }
+    System.out.println("Message ID OK: " + message.checkMessageID());
+    System.out.println("Hash: " + message.createMessageHash());
 
-                    System.out.println("Hash: " + message.createMessageHash());
+    System.out.println("1. Send");
+    System.out.println("2. Store");
+    System.out.println("3. Discard");
 
-                    System.out.println("\n1. Send");
-                    System.out.println("2. Store");
-                    System.out.println("3. Discard");
+    String action = scanner.nextLine();
 
-                    String action = scanner.nextLine();
+   
+    String status = message.sendMessage(action);
 
-                    System.out.println(message.sendMessage(action));
+    System.out.println(status);
 
-                    break;
+    
+    if (!status.equalsIgnoreCase("Message discarded")) {
+        Message.addMessage(messageID, recipient, text);
+    }
 
+    break;
                 case 2:
                     System.out.println("Coming soon...");
                     break;
 
+                //  PART 3 
                 case 3:
+                    System.out.println("Longest Message: " + Message.getLongestMessage());
+                    break;
+
+                case 4:
+                    System.out.print("Enter Message ID: ");
+                    System.out.println(Message.searchByID(scanner.nextLine()));
+                    break;
+
+                case 5:
+                    System.out.print("Enter Recipient: ");
+                    System.out.println(Message.searchByRecipient(scanner.nextLine()));
+                    break;
+
+                case 6:
+                    System.out.print("Enter Message Hash: ");
+                    System.out.println(Message.deleteByHash(scanner.nextLine()));
+                    break;
+
+                case 7:
+                    System.out.println(Message.displayReport());
+                    break;
+
+                case 8:
                     System.out.println("Goodbye!");
                     break;
 
@@ -111,19 +141,6 @@ public class RegistrationAccountFeature {
                     System.out.println("Invalid option.");
             }
 
-        } while (choice != 3);
+        } while (choice != 8);
     }
 }
-    
-
-
-     
-        
-       
-        
-    
-         
-       
-    
-
-
